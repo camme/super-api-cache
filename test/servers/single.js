@@ -32,29 +32,65 @@ describe('Simple server with one single', () => {
         let internalUrl = `http://localhost:${process.env.PORT || 8765}`;
         let cache = await sac.create();
 
-        let data = {
-            'foo': { data: 1 },
-            'bar': { data: 2 }
-        };
+        server.use(cache.middleware(server));
 
-        server.use(cache.middleware());
+        // Count how many times the route has been accessed
+        let counter = 0;
 
         server.get('/:id', (req, res, next) => {
-            let currentData = data[req.params.id];
+            let currentData = {data: 1};
             cache.add(req.url, 'service1', currentData);
+            counter++;
             res.send(currentData);
             return next();
         });
 
         let response = await fetch(`${internalUrl}/foo`).then((result) => result.json());
 
+        // Check so the cache has saved the data
         let item = await cache.get('/foo');
         expect(item).to.exist;
         expect(item).to.have.property('data');
         expect(item.data).to.be.equal(1);
 
+        response = await fetch(`${internalUrl}/foo`).then((result) => result.json());
+
+        // Check so we only run the route one time
+        expect(counter).to.be.equal(1);
+
         return Promise.resolve();
 
     });
+
+    it('A request that has been cached can be overriden with cache-control: no-cache header', async () => {
+
+        let internalUrl = `http://localhost:${process.env.PORT || 8765}`;
+        let cache = await sac.create();
+
+        server.use(cache.middleware(server));
+
+        // Count how many times the route has been accessed
+        let counter = 0;
+
+        server.get('/:id', (req, res, next) => {
+            let currentData = {data: 1};
+            cache.add(req.url, 'service1', currentData);
+            counter++;
+            res.send(currentData);
+            return next();
+        });
+
+        let response = await fetch(`${internalUrl}/foo`).then((result) => result.json());
+
+        let headers = { 'Cache-Control': 'no-cache' }
+        response = await fetch(`${internalUrl}/foo`, { headers: headers }).then((result) => result.json());
+
+        // Check so we got the request two times
+        expect(counter).to.be.equal(2);
+
+        return Promise.resolve();
+
+    });
+
 
 });

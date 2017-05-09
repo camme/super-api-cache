@@ -6,8 +6,9 @@ const List = function () {
 
 List.prototype.add = async function(key, labels, data) {
 
+    // Treat the key as a label as well
     let item = {
-        labels: labels.concat([]),
+        labels: labels.concat([key]),
         key: key,
         data: data,
         counter: 0
@@ -73,7 +74,7 @@ List.prototype.clear = async function(labels) {
         return Promise.resolve([]);
     }
 
-    const labelList = Array.prototype.slice.call(arguments);
+    const labelList = Array.isArray(labels) ? labels : [labels];
 
     let itemIterator = this.items.values();
     let currentItem = itemIterator.next().value;

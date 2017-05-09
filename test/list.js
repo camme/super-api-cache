@@ -13,12 +13,12 @@ describe('List', () => {
         let item1 = await list.getItem('datamaskin1');
         expect(item1).to.exist;
         expect(item1).to.have.property('labels');
-        expect(item1.labels).to.include.members(['foo', 'bar']);
+        expect(item1.labels).to.include.members(['foo', 'bar', 'datamaskin1']);
 
         let item2 = await list.getItem('datamaskin2');
         expect(item2).to.exist;
         expect(item2).to.have.property('labels');
-        expect(item2.labels).to.include.members(['foo', 'baq']);
+        expect(item2.labels).to.include.members(['foo', 'baq', 'datamaskin2']);
 
         return Promise.resolve();
 
@@ -75,7 +75,7 @@ describe('List', () => {
 
     });
 
-    it('Delete multiple items by label', async () => {
+    it('Delete multiple items by label as a string', async () => {
 
         let list = new List();
         await list.add('datamaskin1', ['foo', 'bar']);
@@ -92,6 +92,24 @@ describe('List', () => {
 
     });
 
+    it('Delete multiple items by labels as an array', async () => {
+
+        let list = new List();
+        await list.add('datamaskin1', ['foo', 'bar']);
+        await list.add('datamaskin2', ['foo', 'baq']);
+        await list.add('datamaskin3', ['baq', 'bar']);
+
+        let deleted = await list.clear(['foo']);
+        expect(deleted).to.exist;
+        expect(deleted).to.have.length.of(2);
+
+        let result = await list.find('foo');
+        expect(result).to.exist;
+        expect(result).to.have.length.of(0);
+
+    });
+
+ 
     it('Get an item data by key', async () => {
 
         let list = new List();
