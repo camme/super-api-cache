@@ -42,8 +42,8 @@ Clearing a label, will clear all cached responses with that label.
         }
     });
 
-First type, the endpoint will handle it as usual
-Next time, it will be handled by the cache. 
+1. First type, the endpoint will handle it as usual
+2. Next time, it will be handled by the cache. 
 
 There are more complex scenarios to show how it is meant to be used, but just in the tests
     
