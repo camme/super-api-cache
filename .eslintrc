@@ -1,0 +1,15 @@
+{
+    "parser": "babel-eslint",
+    "extends": ["./node_modules/eslint-24hr/eslint-nodejs"],
+    "plugins": [
+        "chai-friendly"
+    ],
+    "env": {
+      "node" : true
+    },
+    "globals": {
+        "it": true,
+        "describe": true
+        "process": true
+    }
+}

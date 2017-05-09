@@ -1,5 +1,5 @@
 const List = require('../src/lib/list');
-const expect = require("chai").expect;
+const expect = require('chai').expect;
 
 describe('List', () => {
 
@@ -7,16 +7,15 @@ describe('List', () => {
 
         let list = new List();
 
-        let items = null;
-        items = await list.add('datamaskin1', ['foo', 'bar']);
-        items = await list.add('datamaskin2', ['foo', 'baq']);
- 
-        let item1 = await items.get('datamaskin1');
+        await list.add('datamaskin1', ['foo', 'bar']);
+        await list.add('datamaskin2', ['foo', 'baq']);
+
+        let item1 = await list.getItem('datamaskin1');
         expect(item1).to.exist;
         expect(item1).to.have.property('labels');
         expect(item1.labels).to.include.members(['foo', 'bar']);
 
-        let item2 = await items.get('datamaskin2');
+        let item2 = await list.getItem('datamaskin2');
         expect(item2).to.exist;
         expect(item2).to.have.property('labels');
         expect(item2.labels).to.include.members(['foo', 'baq']);
@@ -29,16 +28,15 @@ describe('List', () => {
 
         let list = new List();
 
-        let items = null;
-        items = await list.add('datamaskin1', ['foo', 'bar']);
-        items = await list.add('datamaskin2', ['foo', 'baq']);
- 
-        let item1 = await list.get('datamaskin1');
+        await list.add('datamaskin1', ['foo', 'bar']);
+        await list.add('datamaskin2', ['foo', 'baq']);
+
+        let item1 = await list.getItem('datamaskin1');
         expect(item1).to.exist;
         expect(item1).to.have.property('labels');
         expect(item1.labels).to.include.members(['foo', 'bar']);
 
-        let item2 = await list.get('datamaskin2');
+        let item2 = await list.getItem('datamaskin2');
         expect(item2).to.exist;
         expect(item2).to.have.property('labels');
         expect(item2.labels).to.include.members(['foo', 'baq']);
@@ -52,7 +50,7 @@ describe('List', () => {
         let key = 'datamaskin';
         let labels = ['foo', 'bar'];
         let list = new List();
-        let items = await list.add(key, labels);
+        await list.add(key, labels);
 
         let result = await list.find('foo');
         expect(result).to.have.length.of(1);
@@ -67,8 +65,8 @@ describe('List', () => {
         let key = 'datamaskin';
         let labels = ['foo', 'bar'];
         let list = new List();
-        let items = await list.add(key, labels);
 
+        await list.add(key, labels);
         await list.clear('foo');
 
         let result = await list.find('foo');
@@ -80,10 +78,9 @@ describe('List', () => {
     it('Delete multiple items by label', async () => {
 
         let list = new List();
-        let items = null;
-        items = await list.add('datamaskin1', ['foo', 'bar']);
-        items = await list.add('datamaskin2', ['foo', 'baq']);
-        items = await list.add('datamaskin3', ['baq', 'bar']);
+        await list.add('datamaskin1', ['foo', 'bar']);
+        await list.add('datamaskin2', ['foo', 'baq']);
+        await list.add('datamaskin3', ['baq', 'bar']);
 
         let deleted = await list.clear('foo');
         expect(deleted).to.exist;
@@ -99,13 +96,12 @@ describe('List', () => {
 
         let list = new List();
 
-        let items = null;
-        items = await list.add('datamaskin1', ['foo', 'bar'], { text: 'hej' });
-        items = await list.add('datamaskin2', ['foo', 'baq'], { text: 'tjena' });
-        items = await list.add('datamaskin3', ['baq', 'bar'], { text: 'hallo' });
+        await list.add('datamaskin1', ['foo', 'bar'], { text: 'hej' });
+        await list.add('datamaskin2', ['foo', 'baq'], { text: 'tjena' });
+        await list.add('datamaskin3', ['baq', 'bar'], { text: 'hallo' });
 
-        let result = await list.getData('datamaskin2');
-        expect(result).to.exist;
+        let result = await list.get('datamaskin2');
+        expect(result).not.to.be.equal(null); // to.exist;
         expect(result).to.have.property('text');
         expect(result.text).to.be.equal('tjena');
 
@@ -117,24 +113,23 @@ describe('List', () => {
 
         let list = new List();
 
-        let items = null;
-        items = await list.add('datamaskin1', ['foo', 'bar'], { text: 'hej' });
-        items = await list.add('datamaskin2', ['foo', 'baq'], { text: 'tjena' });
-        items = await list.add('datamaskin3', ['baq', 'bar'], { text: 'hallo' });
+        await list.add('datamaskin1', ['foo', 'bar'], { text: 'hej' });
+        await list.add('datamaskin2', ['foo', 'baq'], { text: 'tjena' });
+        await list.add('datamaskin3', ['baq', 'bar'], { text: 'hallo' });
 
         let item;
 
-        await list.getData('datamaskin2');
+        await list.get('datamaskin2');
 
-        item = await list.get('datamaskin2');
+        item = await list.getItem('datamaskin2');
         expect(item.counter).to.be.equal(1);
 
-        await list.getData('datamaskin2');
-        await list.getData('datamaskin2');
-        await list.getData('datamaskin2');
-        await list.getData('datamaskin2');
+        await list.get('datamaskin2');
+        await list.get('datamaskin2');
+        await list.get('datamaskin2');
+        await list.get('datamaskin2');
 
-        item = await list.get('datamaskin2');
+        item = await list.getItem('datamaskin2');
         expect(item.counter).to.be.equal(5);
 
 

@@ -15,17 +15,17 @@ List.prototype.add = async function(key, labels, data) {
 
     this.items.set(key, item);
 
-    return this.items;
+    return this;
 
 };
 
-List.prototype.get = async function(key) {
+List.prototype.getItem = async function(key) {
     let item = this.items.get(key);
     return Promise.resolve(item);
 };
 
-List.prototype.getData = async function(key) {
-    return this.get(key)
+List.prototype.get = async function(key) {
+    return this.getItem(key)
         .then(item => {
 
             if (!item) {

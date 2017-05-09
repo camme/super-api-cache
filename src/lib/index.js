@@ -1,48 +1,29 @@
 const List = require('./list');
 
-let cacheList;
-
-function returnCurrentCache() {
+function create() {
 
     return Promise.resolve()
         .then(() => {
-            if (!cacheList) {
-                cacheList = new List();
+
+            let list = new List();
+
+            return {
+
+                get: list.get.bind(list),
+                getItem: list.getItem.bind(list),
+                add: list.add.bind(list),
+                find: list.find.bind(list),
+                clear: list.clear.bind(list),
+
+                middleware: () => (req, res, next) => {
+                    next();
+                }
+
             }
-            return cacheList;
+
         });
 
 }
 
-function add(key, labels, data) {
+exports.create = create;
 
-    return returnCurrentCache()
-        .then(cache => {
-            return cache.add(key, labels, data);
-        });
-
-}
-
-function get(key) {
-
-    return returnCurrentCache()
-        .then(cache => {
-            return cache.getData(key);
-        });
-
-}
-
-
-function getItemInfo(key) {
-
-    return returnCurrentCache()
-        .then(cache => {
-            return cache.get(key);
-        });
-
-}
-
-
-exports.add = add;
-exports.get = get;
-exports.getItemInfo = getItemInfo;
