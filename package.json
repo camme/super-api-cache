@@ -6,14 +6,27 @@
   "scripts": {
     "test": "./node_modules/.bin/mocha test/**.js --watch --reporter spec"
   },
-  "author": "",
-  "license": "ISC",
+  "author": {
+    "name": "Camilo Tapia",
+    "email": "camilo.tapia@gmail.com",
+    "url": "http://www.1001.io/"
+  },
+  "keywords": [
+    "api",
+    "cache"
+  ],
+  "license": "MIT",
   "dependencies": {
     "chai": "^3.5.0",
     "eslint-24hr": "1.0.5",
     "eslint-plugin-chai-expect": "1.1.1",
     "mocha": "^3.3.0"
   },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/camme/super-api-cache.git"
+    },
+ 
   "devDependencies": {
     "eslint-plugin-chai-friendly": "^0.3.6",
     "isomorphic-fetch": "^2.2.1",
